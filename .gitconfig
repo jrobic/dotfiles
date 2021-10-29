@@ -1,0 +1,221 @@
+[user]
+name = Jonathan Robic
+email = hello@jonathanrobic.fr
+
+[credential]
+helper = osxkeychain
+
+[init]
+defaultBranch = main
+
+[web]
+browser = google-chrome
+
+[alias]
+ci = commit
+cim = commit -m
+wip = commit -m "wip" --no-verify
+rhh = reset --hard HEAD
+co = checkout
+st = status
+br = branch
+fa = fetch --all
+ap = add -p .
+lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+permission-reset = '!git diff -p -R --no-color | grep -E "^(diff|(old|new) mode)" --color=never | git apply'
+
+# View abbreviated SHA, description, and history graph of the latest 20 commits
+l = log --pretty=oneline -n 20 --graph --abbrev-commit
+
+# View the current working tree status using the short format
+s = status -s
+
+# Show the diff between the latest commit and the current state
+d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+# `git di $number` shows the diff between the state `$number` revisions ago and the current state
+di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+# Pull in remote changes for the current repository and all its submodules
+p = !"git pull; git submodule foreach git pull origin master"
+
+# Clone a repository including all submodules
+c = clone --recursive
+
+# Commit all changes
+ca = !git add -A && git commit -av
+
+# Switch to a branch, creating it if necessary
+go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+
+# Show verbose output about tags, branches or remotes
+tags = tag -l
+branches = branch -a
+remotes = remote -v
+
+# Amend the currently staged files to the latest commit
+amend = commit --amend --reuse-message=HEAD
+
+# Credit an author on the latest commit
+credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+# Interactive rebase with the given number of latest commits
+reb = "!r() { git rebase -i HEAD~$1; }; r"
+
+# Remove the old tag with this name and tag the latest commit with it.
+retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
+
+# Find branches containing commit
+fb = "!f() { git branch -a --contains $1; }; f"
+
+# Find tags containing commit
+ft = "!f() { git describe --always --contains $1; }; f"
+
+# Find commits by source code
+fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+
+# Find commits by commit message
+fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+
+# Remove branches that have already been merged with master
+# a.k.a. ‘delete merged’
+dm = "!git branch --merged | grep -v \"(^\\*|master|develop|main)\" | xargs -n 1 git branch -d"
+# git branch --merged | egrep -v "(^\*|master|develop)" | xargs git branch -d
+
+# List contributors with number of commits
+contributors = shortlog --summary --numbered
+
+# show what I did today
+day = "!sh -c 'git log --reverse --no-merges --branches=* --date=local --after=\"yesterday 11:59PM\" --author=\"$(git config --get user.name)\"'"
+
+# order files by number of commits, ascending
+# Written by Corey Haines
+# Scriptified by Gary Bernhardt
+# Show churn for a time range:
+#   $ git churn --since='1 month ago'
+churn = "!f() { git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g; }; f"
+
+count = shortlog -sn
+
+# Rebase
+rbid = "!git rebase -i origin/develop"
+rbi = "!f() { git rebase -i origin/$1; }; f"
+
+unstage = reset HEAD
+undo-commit = reset --soft HEAD^
+poh = push origin HEAD
+pulloh = pull origin HEAD
+set-upstream = "!git branch --set-upstream-to=origin/$(git symbolic-ref --short HEAD)"
+
+[apply]
+
+# Detect whitespace errors when applying a patch
+whitespace = fix
+
+[core]
+
+# Use custom `.gitignore` and `.gitattributes`
+excludesfile = ~/.gitignore
+attributesfile = ~/.gitattributes
+
+# Treat spaces before tabs and all kinds of trailing whitespace as an error
+# [default] trailing-space: looks for spaces at the end of a line
+# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+# Make `git rebase` safer on macOS
+# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+trustctime = false
+
+# Prevent showing files whose names contain non-ASCII symbols as unversioned.
+# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+precomposeunicode = false
+
+editor = vim
+autocrlf = input
+# pager = diff-so-fancy | less --tabs=4 -RFX
+
+[color]
+diff = auto
+status = auto
+branch = auto
+interactive = auto
+ui = auto
+
+[color "branch"]
+current = green bold
+local = green
+remote = red bold
+
+[color "diff"]
+meta = 11
+frag = magenta bold
+old = red bold
+new = green bold
+commit = yellow bold
+whitespace = red reverse
+
+[color "status"]
+added = green bold
+changed = yellow bold
+untracked = red
+
+[color "sh"]
+branch = yellow
+
+[color "diff-highlight"]
+oldNormal = red bold
+oldHighlight = red bold 52
+newNormal = green bold
+newHighlight = green bold 22
+
+[commit]
+# https://help.github.com/articles/signing-commits-using-gpg/
+#gpgSign = true
+
+[diff]
+# Detect copies as well as renames
+renames = copies
+mnemonicprefix = true
+compactionHeuristic = true
+
+[difftool]
+prompt = false
+
+[diff "bin"]
+# Use `hexdump` to diff binary files
+textconv = hexdump -v -C
+
+[pager]
+diff = "diff-so-fancy | less --tabs=4 -RFX"
+show = "diff-so-fancy | less --tabs=4 -RFX"
+
+[help]
+# Automatically correct and execute mistyped commands
+autocorrect = 1
+
+[merge]
+# Include summaries of merged commits in newly created merge commit messages
+log = true
+tool = Kaleidoscope
+
+[pull]
+rebase = true
+
+[rebase]
+instructionFormat = "[%an - %ar] %s"
+autoStash = true
+
+[push]
+# Use the Git 1.x.x default to avoid errors on machines with old Git
+# installations. To use `simple` instead, add this to your `~/.extra` file:
+# `git config --global push.default simple`. See http://git.io/mMah-w.
+default = simple
+# Make `git push` push relevant annotated tags when pushing branches out.
+followTags = true
+
+[gpg]
+program = gpg
+
+[github]
+user = jrobic

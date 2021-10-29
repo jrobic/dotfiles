@@ -1,0 +1,12 @@
+*.DS_Store
+*.LSOverride
+*.AppleDouble
+
+Thumbs.db
+.bundle
+Brewfile.lock.json
+.history
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes

@@ -1,0 +1,60 @@
+#!/bin/bash
+
+alias c="clear"
+alias m="man"
+alias map="xargs -n1"
+alias q="exit"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Empty trash.
+alias empty-trash="rm -rf ~/.Trash/*"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Get local IP.
+
+alias local-ip="ifconfig \
+#                    | grep 'inet adr' \
+#                    | grep -v '127.0.0.1' \
+#                    | cut -d: -f2 \
+#                    | cut -d' ' -f1"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Others
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Get week number
+alias week='date +%V'
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+alias python='python3'
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Recursively delete `.DS_Store` files
+alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
+# remove broken symlinks
+alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
+
+alias fixcompinit="compaudit | xargs chmod g-w"
+
+function vp9() { ffmpeg -i $1 -c:v libvpx-vp9 $2; }
+function vp8() { ffmpeg -i $1 -c:v libvpx $2; }
+
+function renameFiles() {
+  find . -type f -name "*$1*" | while read FILE; do
+    newfile="$(echo ${FILE} | sed -e 's/'$1'/'$2'/')"
+    mv "${FILE}" "${newfile}"
+  done
+}
