@@ -93,5 +93,11 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 export HOMEBREW_AUTO_UPDATE_SECS=604800
 export GPG_TTY=$(tty)
 
-export PNPM_HOME="/Users/jonathanrobic/Library/pnpm"
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/jrobic/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
+# pnpm end
