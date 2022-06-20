@@ -48,6 +48,9 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 # remove broken symlinks
 alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 
+alias printnodemodules="find . -name 'node_modules' -type d -prune -print | xargs du -chs"
+alias cleannodemodules="find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;"
+
 alias fixcompinit="compaudit | xargs chmod g-w"
 
 function vp9() { ffmpeg -i $1 -c:v libvpx-vp9 $2; }
